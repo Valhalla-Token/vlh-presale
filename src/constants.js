@@ -464,7 +464,7 @@ export const ABI = [
     type: "receive",
   },
 ];
-export const NETWORK_ID = 97;
+export const NETWORK_ID = 56;
 
 // const t_address = "0xEBfeaDD37C5b0db20140Fe515740d0669529055E";
 // const t_address = "0xb96c7C6C233A57B3A0ee98cCB1500973B358e4CD";
