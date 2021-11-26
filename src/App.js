@@ -200,7 +200,7 @@ function App() {
                     <p>{onlyWhitelisted && isWhitelisted ? error : ""}</p>
                     <p>{onlyWhitelisted && isWhitelisted ? errorA : ""}</p>
                   </div>
-                  {onlyWhitelisted && isWhitelisted ? (
+                  {(!onlyWhitelisted) || (onlyWhitelisted && isWhitelisted) ? (
                     <>
                       <input
                         type="number"
