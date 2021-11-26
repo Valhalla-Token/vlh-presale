@@ -169,7 +169,7 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <header className="App-header" style={{ backgroundImage: "url(/bg-min.jpeg)" }}>
         {loading ? (
           <p>Loading...</p>
         ) : web3 ? (
@@ -178,7 +178,7 @@ function App() {
               <p>{error}</p>
             ) : started ? (
               !completed ? (
-                <>
+                <div class="rounded bg-dark p-5 opacity">
                   <div style={{ fontSize: "16px" }}>
                     Soft Cap: {web3.utils.fromWei(softcap.toString(), "ether")}{" "}
                     BNB
@@ -207,7 +207,7 @@ function App() {
                         placeholder="Enter amount"
                         onChange={handleChange}
                         style={{
-                          width: "40%",
+                          width: "100%",
                           border: "none",
                           padding: "14px 28px",
                           fontSize: "16px",
@@ -239,7 +239,7 @@ function App() {
                   ) : (
                     <p>You are not whitelisted, wait for PUBLIC opening</p>
                   )}
-                </>
+                </div>
               ) : (
                 <p>Public sale has ended</p>
               )
