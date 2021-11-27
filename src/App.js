@@ -222,24 +222,18 @@ function App() {
             ) : started ? (
               !completed ? (
                 <div className="rounded bg-dark p-5 opacity">
-                  <div style={{ fontSize: "16px" }}>
-                    Soft Cap: {web3.utils.fromWei(softcap.toString(), "ether")}{" "}
-                    BNB
+                  <div>
+                    Raised: <span className="pink-text">{web3.utils.fromWei(raised.toString(), "ether")}</span> BNB
                     <br />
-                    Hard Cap: {web3.utils.fromWei(
-                      hardcap.toString(),
-                      "ether"
-                    )}{" "}
-                    BNB
+                    Soft Cap: <span className="pink-text">{web3.utils.fromWei(softcap.toString(), "ether")}</span> BNB
                     <br />
-                    Raised: {web3.utils.fromWei(raised.toString(), "ether")} BNB
+                    Hard Cap: <span className="pink-text">{web3.utils.fromWei(hardcap.toString(), "ether")}</span> BNB
                     <br />
-                    Your Contribution:{" "}
-                    {web3.utils.fromWei(mine.toString(), "ether")} BNB
+                    Min. Buy: <span className="pink-text">{web3.utils.fromWei(min.toString(), "ether")}</span> BNB
                     <br />
-                    Min. Buy: {web3.utils.fromWei(min.toString(), "ether")} BNB
+                    Max. Buy: <span className="pink-text">{web3.utils.fromWei(max.toString(), "ether")}</span> BNB
                     <br />
-                    Max. Buy: {web3.utils.fromWei(max.toString(), "ether")} BNB
+                    Your Contribution: <span className="pink-text">{web3.utils.fromWei(mine.toString(), "ether")}</span> BNB
                     <p>{onlyWhitelisted && isWhitelisted ? error : ""}</p>
                     <p>{onlyWhitelisted && isWhitelisted ? errorA : ""}</p>
                   </div>
@@ -249,37 +243,50 @@ function App() {
                         type="number"
                         placeholder="Enter amount"
                         onChange={handleChange}
-                        style={{
-                          width: "100%",
-                          border: "none",
-                          padding: "14px 28px",
-                          fontSize: "16px",
-                          textAlign: "center",
-                        }}
+                        className="w-100 py-2 px-3 text-center"
                       />
-                      <div className="text-center">
-                      <button
-                        onClick={buy}
-                        style={{
-                          marginTop: "10px",
-                          display:
-                            web3.utils.fromWei(mine.toString(), "ether") >=
-                              web3.utils.fromWei(max.toString(), "ether") ||
-                            errorAB
-                              ? "none"
-                              : "inline",
-                          width: "70%",
-                          border: "none",
-                          backgroundColor: "#04AA6D",
-                          padding: "14px 28px",
-                          fontSize: "16px",
-                          cursor: "pointer",
-                          textAlign: "center",
-                        }}
+                      <p className="my-3 text-center">1 BNB = 666666666.67 tokens</p>
+                      <div className="text-center my-2">
+                        <button className="btn btn-main"
+                          onClick={buy}
+                          style={{
+                            display:
+                              web3.utils.fromWei(mine.toString(), "ether") >=
+                                web3.utils.fromWei(max.toString(), "ether") ||
+                              errorAB
+                                ? "none"
+                                : "block"
+                          }}
+                        >
+                          Buy Tokens
+                        </button>
+                      </div>
+                      <div className="small-text mt-4"
+                           style={{
+                             display:
+                                 web3.utils.fromWei(mine.toString(), "ether") >=
+                                 web3.utils.fromWei(max.toString(), "ether") ||
+                                 errorAB
+                                     ? "none"
+                                     : "block"
+                           }}
                       >
-                        Buy Tokens
-                      </button>
-                      </div >
+                        <p className="p-0 mt-0 mx-0 mb-3 fw-bold">
+                          Don't forget to add VLH as as a custom token to your wallet!
+                        </p>
+                        <p className="p-0 m-0">
+                          CA: <span className="pink-text">0x8B19632a7eaEaD22db42b803234bD3B48d30Ec48</span>
+                        </p>
+                        <p className="p-0 m-0">
+                          Name: <span className="pink-text">Valhalla</span>
+                        </p>
+                        <p className="p-0 m-0">
+                          Symbol: <span className="pink-text">VLH</span>
+                        </p>
+                        <p className="p-0 m-0">
+                          Decimals: <span className="pink-text">18</span>
+                        </p>
+                      </div>
                     </>
                   ) : (
                     <p>You are not whitelisted, wait for PUBLIC opening</p>
@@ -294,19 +301,7 @@ function App() {
           ) : (
             <>
               <p>{"Please login to MetaMask or TrustWallet"}</p>
-              <button
-                onClick={connect}
-                style={{
-                  marginTop: "10px",
-                  display: "block",
-                  border: "none",
-                  backgroundColor: "#04AA6D",
-                  padding: "14px 28px",
-                  fontSize: "16px",
-                  cursor: "pointer",
-                  textAlign: "center",
-                }}
-              >
+              <button className="btn btn-main" onClick={connect}>
                 Connect
               </button>
             </>
@@ -315,17 +310,7 @@ function App() {
           <>
             <p>Install Metamask or TrustWallet</p>
             <p>OR</p>
-            <button onClick={setupWC}
-                  style={{
-                    marginTop: "10px",
-                    display: "block",
-                    border: "none",
-                    backgroundColor: "#04AA6D",
-                    padding: "14px 28px",
-                    fontSize: "16px",
-                    cursor: "pointer",
-                    textAlign: "center",
-            }}>Wallet Connect</button>
+            <button className="btn btn-main" onClick={setupWC}>Wallet Connect</button>
           </>
         )}
       </header>

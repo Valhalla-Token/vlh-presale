@@ -23,17 +23,47 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1.5em;
+  font-size: 1.1em;
   font-weight: bold;
+  line-height: 1.8em;
   color: white;
+  overflow-x: hidden;
 }
 
 .opacity {
   opacity: 0.9;
 }
 
-.App-link {
-  color: #61dafb;
+.App-link, .pink-text {
+  color: #cc42e1;
+}
+
+.btn-main {
+  width: 70%;
+  border: 2px solid #cc42e1;
+  color: #cc42e1;
+  background: transparent;
+  font-size: 1.1em;
+  font-weight: bold;
+  line-height: 1.8em;
+  margin: auto;
+}
+
+.btn-main:hover {
+  color: white;
+  background: #cc42e1;
+}
+
+.small-text {
+  font-size: 0.8em;
+  line-height: 1.4em;
+  font-weight: normal;
+}
+
+@media (min-width: 576px) {
+  .small-text {
+    font-size: 0.9em;
+  }
 }
 
 @keyframes App-logo-spin {
