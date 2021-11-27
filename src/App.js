@@ -195,9 +195,14 @@ function App() {
     e.preventDefault();
     $(e.target).text("Buying...");
     $(e.target).attr("disabled", true);
-    await contract.methods
+    try{
+      await contract.methods
       .buyTokens(account)
       .send({ from: account, value: web3.utils.toWei(amount.toString(), "ether") });
+    }catch(e){
+      $(e.target).text("Buy Tokens");
+      $(e.target).removeAttr("disabled");      
+    }
     $(e.target).text("Buy Tokens");
     $(e.target).removeAttr("disabled");
   }
