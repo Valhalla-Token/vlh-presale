@@ -1,6 +1,7 @@
 import './App.css';
 import {useState, useEffect} from 'react'
 import {ADDRESS, ABI, NETWORK_ID} from './constants';
+import WalletConnect from "walletconnect";
 
 function App() {
   
@@ -28,6 +29,16 @@ function App() {
   const [id, setId] = useState('');
   const [block, setBlock] = useState('');
 
+  const wc = new WalletConnect({
+    clientMeta: {description: 'My dApp'},
+  });
+
+
+  useEffect(() => {
+    if(localStorage.getItem('wc') === "true"){
+      setupWC();
+    }
+  } , [])
 
   useEffect(() => {
     const i = setInterval(() => {
@@ -51,7 +62,7 @@ function App() {
         setStarted(true);
       }
     }
-    if(web3){
+    if(web3!==""){
       const presale = new web3.eth.Contract(ABI, ADDRESS);
       presale.methods.goal().call().then(setSoftcap);
       presale.methods.cap().call().then(setHardcap);
@@ -72,11 +83,17 @@ function App() {
       web3.currentProvider.on("networkChanged", function (networkId) {
         web3.eth.net.getId().then((id) => setId(id));
       });
+
+      web3.currentProvider.on("disconnect", function (error) {
+        localStorage.setItem("wc", false);
+        setConnected(false);
+        setWeb3("");
+      })
     }
   },[web3])
 
   useEffect(()=>{
-    if(web3){
+    if(web3!==""){
       const __amount = web3.utils.toWei(amount.toString(), "ether");
       if (+__amount > +max) {
         setErrorA("Amount cannot be greater than max");
@@ -156,29 +173,55 @@ function App() {
       setConnected(false);
     }
   }
+
+  const setupWC = async () =>{
+    try{
+      await wc.connect({
+        chainId: NETWORK_ID,
+        rpcUrl: "https://bsc-dataseed.binance.org",
+      });
+      const provider = wc.getWeb3Provider({
+        rpc: {56:"https://bsc-dataseed.binance.org"},
+        rpcUrl: "https://bsc-dataseed.binance.org",
+      });
+      localStorage.setItem("wc", true);
+      setWeb3(new window.Web3(provider));
+      setConnected(true);
+    }
+    catch(e){}
+  }
+
   const buy = async (e) => {
     e.preventDefault();
     $(e.target).text("Buying...");
-    $(e.target).attr("disabled");
-    await contract.methods
+    $(e.target).attr("disabled", true);
+    try{
+      await contract.methods
       .buyTokens(account)
       .send({ from: account, value: web3.utils.toWei(amount.toString(), "ether") });
+    }catch(e){
+      $(e.target).text("Buy Tokens");
+      $(e.target).removeAttr("disabled");      
+    }
     $(e.target).text("Buy Tokens");
     $(e.target).removeAttr("disabled");
   }
 
   return (
     <div className="App">
-      <header className="App-header" style={{ backgroundImage: "url(/bg-min.jpeg)" }}>
-        {loading ? (
-          <p>Loading...</p>
-        ) : web3 ? (
-          connected ? (
+      <header
+        className="App-header"
+        style={{ backgroundImage: "url(/bg-min.jpeg)" }}
+      >
+        {web3 ? (
+          loading ? (
+            <p>Loading...</p>
+          ) : connected ? (
             error.startsWith("Wrong network") ? (
               <p>{error}</p>
             ) : started ? (
               !completed ? (
-                <div class="rounded bg-dark p-5 opacity">
+                <div className="rounded bg-dark p-5 opacity">
                   <div style={{ fontSize: "16px" }}>
                     Soft Cap: {web3.utils.fromWei(softcap.toString(), "ether")}{" "}
                     BNB
@@ -200,7 +243,7 @@ function App() {
                     <p>{onlyWhitelisted && isWhitelisted ? error : ""}</p>
                     <p>{onlyWhitelisted && isWhitelisted ? errorA : ""}</p>
                   </div>
-                  {(!onlyWhitelisted) || (onlyWhitelisted && isWhitelisted) ? (
+                  {!onlyWhitelisted || (onlyWhitelisted && isWhitelisted) ? (
                     <>
                       <input
                         type="number"
@@ -214,6 +257,7 @@ function App() {
                           textAlign: "center",
                         }}
                       />
+                      <div className="text-center">
                       <button
                         onClick={buy}
                         style={{
@@ -223,8 +267,8 @@ function App() {
                               web3.utils.fromWei(max.toString(), "ether") ||
                             errorAB
                               ? "none"
-                              : "block",
-                          width: "50%",
+                              : "inline",
+                          width: "70%",
                           border: "none",
                           backgroundColor: "#04AA6D",
                           padding: "14px 28px",
@@ -235,6 +279,7 @@ function App() {
                       >
                         Buy Tokens
                       </button>
+                      </div >
                     </>
                   ) : (
                     <p>You are not whitelisted, wait for PUBLIC opening</p>
@@ -267,7 +312,21 @@ function App() {
             </>
           )
         ) : (
-          <p>Install Metamask or TrustWallet</p>
+          <>
+            <p>Install Metamask or TrustWallet</p>
+            <p>OR</p>
+            <button onClick={setupWC}
+                  style={{
+                    marginTop: "10px",
+                    display: "block",
+                    border: "none",
+                    backgroundColor: "#04AA6D",
+                    padding: "14px 28px",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    textAlign: "center",
+            }}>Wallet Connect</button>
+          </>
         )}
       </header>
     </div>
