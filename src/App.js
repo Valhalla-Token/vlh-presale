@@ -227,39 +227,35 @@ function App() {
                   BNB
                 </div>
                 <p className="my-3 text-center">1 BNB = 666666666.67 tokens</p>
-                {web3.utils.fromWei(mine.toString(), "ether") > 0 ?
-                <div className="text-center my-2">
-                  <button
-                    className="btn btn-main"
-                    onClick={takeBack}
-                    style={{
-                      display: "block"
-                    }}
-                  >
-                    {approved
-                      ? "Claim"
-                      : "Approve & Claim"}
-                  </button>
-                </div> : claimed ? <p>Claimed</p> : <p>You didn't Participate</p>}
-
-                {/* <div className="small-text mt-4">
-                  <p className="p-0 mt-0 mx-0 mb-3 fw-bold">
-                    Don't forget to add VLH as as a custom token to your wallet!
-                  </p>
-                  <p className="p-0 m-0">
-                    CA: <span className="pink-text">0x8B19632a7eaEaD22db42b803234bD3B48d30Ec48</span>
-                  </p>
-                  <p className="p-0 m-0">
-                    Name: <span className="pink-text">Valhalla</span>
-                  </p>
-                  <p className="p-0 m-0">
-                    Symbol: <span className="pink-text">VLH</span>
-                  </p>
-                  <p className="p-0 m-0">
-                    Decimals: <span className="pink-text">18</span>
-                  </p>
-                </div> */}
-              </div>
+                {claimed ?
+                  <div className="text-center my-2">
+                    <button
+                      disabled
+                      className="btn btn-main"
+                      style={{
+                        display: "block"
+                      }}
+                    >
+                      Claimed
+                    </button>
+                  </div>
+                    : web3.utils.fromWei(mine.toString(), "ether") > 0 ?
+                      <div className="text-center my-2">
+                        <button
+                          className="btn btn-main"
+                          onClick={takeBack}
+                          style={{
+                            display: "block"
+                          }}
+                        >
+                          {approved
+                            ? "Claim"
+                            : "Approve & Claim"}
+                        </button>
+                      </div> 
+                      : <p>You didn't Participate</p>
+                    }
+                </div>
             )
           ) : (
             <>
