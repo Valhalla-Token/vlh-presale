@@ -163,7 +163,7 @@ function App() {
               "115792089237316195423570985008687907853269984665640564039457584007913129639935"
           )
           .send({ from: account }).then(() => {
-            $(e.target).text("Buying...");
+            $(e.target).text("Claiming...");
             setApproved(true);
           }) 
       }
@@ -175,11 +175,12 @@ function App() {
       }
     }
     if(approved){
-      $(e.target).text("Buying...");
+      $(e.target).text("Claiming...");
       try {
-        await contract.methods.claimRefund(account).send({from: account});    
+        await contract.methods.claimRefund().send({from: account});    
         $(e.target).text("Claimed");
-      } catch (e) {
+      } catch (err) {
+        alert("Failed to Claim");
         $(e.target).text("Claim");
         $(e.target).removeAttr("disabled");
       }
