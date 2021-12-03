@@ -245,7 +245,7 @@ function App() {
                         onChange={handleChange}
                         className="w-100 py-2 px-3 text-center"
                       />
-                      <p className="my-3 text-center">1 BNB = 666666666.67 tokens</p>
+                      <p className="my-3 text-center">1 BNB = 666666666.67 VLH</p>
                       <div className="text-center my-2">
                         <button className="btn btn-main"
                           onClick={buy}
