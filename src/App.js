@@ -1,6 +1,6 @@
 import './App.css';
 import {useState, useEffect} from 'react'
-import {ADDRESS, ABI, NETWORK_ID, TOKEN_ABI, TOKEN_ADDRESS, VAULT_ABI} from './constants';
+import {ADDRESS, ABI, NETWORK_ID, VAULT_ABI} from './constants';
 import WalletConnect from "walletconnect";
 
 function App() {
@@ -13,9 +13,7 @@ function App() {
   const [raised, setRaised] = useState(0);
   const [mine, setMine] = useState(0);
   const [account, setAccount] = useState("");
-  const [approved, setApproved] = useState("");
   const [contract, setContract] = useState("");
-  const [token, setToken] = useState("");
   const [web3, setWeb3] = useState("");
   const [connected, setConnected] = useState(false);
   const [claimed, setClaimed] = useState(false);
@@ -44,14 +42,12 @@ function App() {
   useEffect(() => {
    
     if(web3!==""){
-      const _token = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);      
       const presale = new web3.eth.Contract(ABI, ADDRESS);
       presale.methods.goal().call().then(setSoftcap);
       presale.methods.cap().call().then(setHardcap);
       presale.methods.weiRaised().call().then(setRaised);
 
       setContract(presale);
-      setToken(_token);
 
       if(id === ''){
         web3.eth.net.getId().then(_id => setId(_id));
@@ -101,13 +97,6 @@ function App() {
           return;
         }
         if (connected) {
-          token.methods
-            .allowance(account, ADDRESS)
-            .call()
-            .then((al) => {
-              setApproved(al > 0);
-            });
-      
           const _mine = await contract.methods.getUserContribution(account).call(); 
           const vault = await contract.methods.vault().call();
           const VAULT = new web3.eth.Contract(VAULT_ABI, vault);
@@ -154,37 +143,15 @@ function App() {
   const takeBack = async (e) => {
     e.preventDefault();
     $(e.target).attr("disabled", true);
-    if(!approved){
-      $(e.target).text("Approving...");
-      try{
-        await token.methods
-          .approve(
-            ADDRESS,
-              "115792089237316195423570985008687907853269984665640564039457584007913129639935"
-          )
-          .send({ from: account }).then(() => {
-            $(e.target).text("Claiming...");
-            setApproved(true);
-          }) 
-      }
-      catch(err){
-        $(e.target).text("Approve & Claim");
-        $(e.target).removeAttr("disabled");
-        alert("Failed to Approve")
-        return;
-      }
+    $(e.target).text("Claiming...");
+    try {
+      await contract.methods.claimRefund().send({from: account});    
+      $(e.target).text("Claimed");
+    } catch (err) {
+      alert("Failed to Claim");
+      $(e.target).text("Claim");
+      $(e.target).removeAttr("disabled");
     }
-    if(approved){
-      $(e.target).text("Claiming...");
-      try {
-        await contract.methods.claimRefund().send({from: account});    
-        $(e.target).text("Claimed");
-      } catch (err) {
-        alert("Failed to Claim");
-        $(e.target).text("Claim");
-        $(e.target).removeAttr("disabled");
-      }
-    };
   }
   return (
     <div className="App">
@@ -247,10 +214,7 @@ function App() {
                           style={{
                             display: "block"
                           }}
-                        >
-                          {approved
-                            ? "Claim"
-                            : "Approve & Claim"}
+                        >Claim
                         </button>
                       </div> 
                       : <p>You didn't Participate</p>
