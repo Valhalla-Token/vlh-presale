@@ -272,16 +272,16 @@ function App() {
                            }}
                       >
                         <p className="p-0 mt-0 mx-0 mb-3 fw-bold">
-                          Don't forget to add VLH as as a custom token to your wallet!
+                          Don't forget to add VLH Presale as as a custom token to your wallet!
                         </p>
                         <p className="p-0 m-0">
-                          CA: <span className="pink-text">0x8B19632a7eaEaD22db42b803234bD3B48d30Ec48</span>
+                          CA: <span className="pink-text">0x730331493335aC90565d182BdC859F9764b5db2e</span>
                         </p>
                         <p className="p-0 m-0">
-                          Name: <span className="pink-text">Valhalla</span>
+                          Name: <span className="pink-text">VLH Presale</span>
                         </p>
                         <p className="p-0 m-0">
-                          Symbol: <span className="pink-text">VLH</span>
+                          Symbol: <span className="pink-text">VLH_Pre</span>
                         </p>
                         <p className="p-0 m-0">
                           Decimals: <span className="pink-text">18</span>
